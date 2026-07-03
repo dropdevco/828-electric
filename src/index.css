@@ -1,0 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-brand-red: #B82429;
+  --color-brand-red-dark: #8D171B;
+  --color-brand-red-light: #D51A27;
+  --color-brand-dark: #090909;
+  --color-brand-dark-light: #1A1A1A;
+  --color-brand-charcoal: #333333;
+  --color-brand-gray-light: #F8F8F8;
+  --color-brand-gray-border: #EAEAEA;
+  --color-brand-white: #FFFFFF;
+
+  --font-display: "Montserrat", sans-serif;
+  --font-body: "Poppins", sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-brand-white);
+    color: var(--color-brand-charcoal);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+  }
+}
+
+/* Custom styles for Hero Gradient Mesh */
+.gradient-mesh {
+  background-color: #090909;
+  background-image: 
+    radial-gradient(at 10% 10%, rgba(184, 36, 41, 0.15) 0px, transparent 50%),
+    radial-gradient(at 90% 10%, rgba(51, 51, 51, 0.4) 0px, transparent 50%),
+    radial-gradient(at 50% 80%, rgba(184, 36, 41, 0.1) 0px, transparent 50%);
+  background-size: 100% 100%;
+}
+
+/* Custom scroll bar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F8F8F8;
+}
+::-webkit-scrollbar-thumb {
+  background: #B82429;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8D171B;
+}
