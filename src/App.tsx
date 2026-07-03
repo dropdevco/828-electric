@@ -141,24 +141,31 @@ export default function App() {
   const testimonials: Testimonial[] = [
     {
       id: 1,
-      name: 'Sarah M.',
-      text: 'They responded quickly to our call and were communicative during the entire process. They fixed our issue quickly and cleanly. From the initial call to the final payment of the invoice, the staff was friendly and helpful. Best recommendation that I have ever received.',
+      name: 'Brian P.',
+      text: '¡828 Electric es genial! Llamé justo después de que cerraran y aun así me atendieron enseguida. Los técnicos vinieron a mi casa a primera hora de la mañana para diagnosticar un problema eléctrico. Trabajaron rápido, solucionaron el problema y todos fueron profesionales y muy amables.',
       rating: 5,
       source: 'Google Review'
     },
     {
       id: 2,
-      name: 'James L.',
-      text: 'Called just after they closed and they still picked right up. Had technicians at my house first thing in the morning to diagnose an electrical issue I was having. They worked fast, correcting my issues and gave me a quote for some additional work I am thinking about having done.',
+      name: 'Francisco O.',
+      text: 'Angel is professional, on time and trustworthy. Highly recommended. Angel y su compañia son super profesionales y honestos. Trabajo muy bien con ellos.',
       rating: 5,
-      source: 'Yelp Review'
+      source: 'Google Review'
     },
     {
       id: 3,
-      name: 'Ricardo R.',
-      text: 'I highly recommend this business very professional and on time and their teams are very nice and Lil Angel and all the personal also very reasonable prices.',
+      name: 'Carlo Q.',
+      text: 'Trabajar con el equipo de 828 siempre ha sido fantástico. Los hemos contratado en muchos proyectos y siempre han sido justos, puntuales y un placer trabajar con ellos. Recomiendo ampliamente 828 para trabajos eléctricos residenciales y comerciales.',
       rating: 5,
-      source: 'BBB Review'
+      source: 'Google Review'
+    },
+    {
+      id: 4,
+      name: 'Eli',
+      text: 'Angel nos explicó todo el proceso de la consulta. Javy fue excelente con la instalación y lo explicó todo con detalle. El equipo fue muy profesional.',
+      rating: 5,
+      source: 'Google Review'
     }
   ]
 
