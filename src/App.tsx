@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   motion, 
   AnimatePresence, 
@@ -6,7 +6,6 @@ import {
   useReducedMotion 
 } from 'framer-motion'
 import { 
-  Zap, 
   Phone, 
   ShieldCheck, 
   Award, 
@@ -19,6 +18,17 @@ import {
   ChevronDown,
   ThumbsUp
 } from 'lucide-react'
+
+import patioLighting from './assets/patio-lighting.jpg'
+import solarInstall from './assets/solar-install.jpg'
+import evCharger from './assets/ev-charger.jpg'
+import outletInstall from './assets/outlet-install.jpg'
+import solarWiring from './assets/solar-wiring.jpg'
+import logo from './assets/logo.png'
+import awardTeam from './assets/award-team.jpg'
+import meterInstall from './assets/meter-install.jpg'
+import wiringHands from './assets/wiring-hands.jpg'
+import constructionWorker from './assets/construction-worker.jpg'
 
 // Define the Service type
 interface Service {
@@ -45,6 +55,397 @@ interface FAQItem {
   answer: string
 }
 
+type Locale = 'en' | 'es'
+
+const content = {
+  en: {
+    navigation: [
+      { label: 'HOME', href: '#' },
+      { label: 'ABOUT', href: '#about' },
+      { label: 'SERVICES', href: '#services' },
+      { label: 'FAQ', href: '#faq' },
+      { label: 'REVIEWS', href: '#reviews' }
+    ],
+    categories: {
+      all: 'ALL',
+      residential: 'RESIDENTIAL',
+      commercial: 'COMMERCIAL',
+      specialty: 'SPECIALTY'
+    },
+    hero: {
+      badge: 'Colossians 3:23',
+      titleLine1: 'Trustworthy Electricians.',
+      titleLine2: 'Electrical Solutions',
+      titleLine3: 'for Homes & Business.',
+      description: 'At 828 Electric, we provide professional commercial and residential services in El Paso. From panels and meters to EV charging, we get the job done right the first time.',
+      primaryCta: 'Call (915) 213-7178',
+      secondaryCta: 'View Our Services',
+      stats: [
+        { val: '8+', label: 'Years Experience' },
+        { val: 'A+', label: 'BBB Rating' },
+        { val: 'Top 5', label: 'El Paso Magazine' }
+      ],
+      floatingBadgeTitle: 'Award-Winning Standard',
+      floatingBadgeSubtitle: 'Ranked Top 5 Best Electricians in El Paso'
+    },
+    about: {
+      eyebrow: 'ABOUT US',
+      heading: 'Top Electricians in Texas',
+      description: 'At 828 Electric, we’re proud to be a family-owned and operated electrical company serving the El Paso area for over eight years. Our licensed and insured electricians provide dependable commercial and residential electrical services.',
+      cards: [
+        {
+          title: 'Family-Owned & Operated',
+          desc: 'For over 8 years, our family has proudly powered homes and businesses across El Paso. We treat every project like it’s for our own home.',
+          img: 'awardTeam'
+        },
+        {
+          title: 'Licensed, Insured & BBB Accredited',
+          desc: 'We’re fully licensed, insured, and accredited by the Better Business Bureau with 8 years of trusted service. Professional work, done right the first time.',
+          img: 'solarWiring'
+        },
+        {
+          title: 'Top 5 Best Electricians in El Paso',
+          desc: 'Recognized by El Paso Magazine for our quality and customer satisfaction. Trusted by families and businesses since 2017.',
+          img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400'
+        }
+      ]
+    },
+    servicesSection: {
+      eyebrow: 'WHAT DO WE OFFER?',
+      heading: 'Reliable Electric Services',
+      description: 'From residential repairs to large-scale commercial installations, our licensed and insured electricians specialize in keeping your property safe and efficient.',
+      explore: 'Explore Details',
+      serviceBadge: 'Service',
+      detailsTitle: 'What We Provide:',
+      close: 'Close Details',
+      viewDetails: 'View Details'
+    },
+    faq: {
+      eyebrow: 'POPULAR QUESTIONS',
+      heading: 'Get Answers to Your Questions',
+      description: 'Electrical projects can raise a lot of questions. Here are answers to some of the most common ones our El Paso customers ask. Still need help? Call us and we will guide you.',
+      button: 'Call (915) 213-7178'
+    },
+    reviews: {
+      eyebrow: 'TESTIMONIALS',
+      heading: 'What Our Clients Say',
+      description: 'Don’t take our word for it. Here is what homeowners and business owners across El Paso think of our services.',
+      verified: 'Verified Client'
+    },
+    cta: {
+      eyebrow: 'GET IN TOUCH',
+      heading: 'Let Us Assist with All Your Electrical Needs',
+      description: 'We offer fast, safe, and code-compliant electrical work across El Paso, Texas. Have a question or need a budget estimate? Call us directly!',
+      callNow: 'Call Now',
+      officeAddress: 'Office Address',
+      address: '8086 Alameda Ave, El Paso TX'
+    },
+    footer: {
+      quickLinks: 'Quick Links',
+      home: 'Home',
+      aboutUs: 'About Us',
+      servicesGrid: 'Services Grid',
+      faqs: 'FAQs',
+      contactDetails: 'Contact Details',
+      primary: 'Primary: (915) 213-7178',
+      secondary: 'Secondary: (915) 271-9524',
+      followUs: 'Follow Us',
+      copyright: '© {year} 828 Electric. All rights reserved.',
+      privacy: 'Privacy Policy',
+      terms: 'Terms & Conditions'
+    },
+    services: [
+      {
+        id: 'wiring',
+        title: 'Commercial & Residential Wiring',
+        description: 'Full-service electrical installation and maintenance for homes and businesses.',
+        categories: ['residential', 'commercial'],
+        details: ['Complete house rewiring', 'Troubleshooting & repairs', 'New outlet & switch installations', 'GFCI outlet setups']
+      },
+      {
+        id: 'meter',
+        title: 'New Meter Installation',
+        description: 'Safe, code-compliant meter and service panel setup.',
+        categories: ['residential', 'commercial', 'specialty'],
+        details: ['Meter box relocations', 'Temporary power connections', 'Service mast upgrades', 'Utility coordination']
+      },
+      {
+        id: 'ev',
+        title: 'EV Charger Installation',
+        description: 'Certified installation for Tesla, ChargePoint, and all EV brands.',
+        categories: ['residential', 'commercial', 'specialty'],
+        details: ['Tesla Wall Connector setup', 'Level 2 EV installations', 'Electrical load assessments', 'Dedicated circuit setups']
+      },
+      {
+        id: 'landscape',
+        title: 'Landscape & Outdoor Lighting',
+        categories: ['residential'],
+        description: 'Create a stunning and secure outdoor space with weatherproof lighting.',
+        details: ['Low-voltage patio lighting', 'Pathway & architectural lights', 'Motion sensor floodlights', 'Smart timer controls']
+      },
+      {
+        id: 'panel',
+        title: 'Panel Upgrades',
+        description: 'Increase your electrical capacity safely with modern breaker panels.',
+        categories: ['residential', 'commercial'],
+        details: ['100A to 200A upgrades', 'Fuse box replacements', 'Subpanel installations', 'Breaker replacements']
+      },
+      {
+        id: 'lighting',
+        title: 'Lighting Solutions',
+        description: 'Ceiling fans, recessed lighting, patio and pool lighting, and more.',
+        categories: ['residential'],
+        details: ['LED recessed lighting', 'Ceiling fan installs', 'Chandelier & pendant hanging', 'Dimmer switch upgrades']
+      }
+    ],
+    testimonials: [
+      {
+        id: 1,
+        name: 'Brian P.',
+        text: '828 Electric is fantastic! I called right after closing and they still took care of me right away. The technicians came to my home early in the morning to diagnose an electrical issue. They worked quickly, fixed it, and were both professional and very kind.',
+        rating: 5,
+        source: 'Google Review'
+      },
+      {
+        id: 2,
+        name: 'Francisco O.',
+        text: 'Angel is professional, on time, and trustworthy. Highly recommended. Angel and his company are super professional and honest. I work very well with them.',
+        rating: 5,
+        source: 'Google Review'
+      },
+      {
+        id: 3,
+        name: 'Carlo Q.',
+        text: 'Working with the 828 team has always been fantastic. We have hired them on many projects and they have always been fair, punctual, and a pleasure to work with. I highly recommend 828 for residential and commercial electrical work.',
+        rating: 5,
+        source: 'Google Review'
+      },
+      {
+        id: 4,
+        name: 'Eli',
+        text: 'Angel explained the whole process clearly. Javy was excellent with the installation and explained everything in detail. The team was very professional.',
+        rating: 5,
+        source: 'Google Review'
+      }
+    ],
+    faqs: [
+      {
+        question: 'Do you offer free estimates?',
+        answer: 'No, we do not offer free estimates. However, you can call to speak with one of our licensed electricians who can provide an estimated price range over the phone. For on-site evaluations, we schedule appointments to ensure accurate, professional assessments.'
+      },
+      {
+        question: 'Are your electricians licensed and insured?',
+        answer: 'Yes! All of our electricians are fully licensed and insured professionals. At 828 Electric LLC, we take pride in delivering safe, code-compliant electrical work for both residential and commercial projects.'
+      },
+      {
+        question: 'What types of electrical work do you handle?',
+        answer: 'We handle all commercial and residential electrical services, including panel upgrades, new meter installations, EV charger setups, ceiling fan installations, recessed lighting, landscape and patio lighting, and more.'
+      },
+      {
+        question: 'Do you install EV chargers?',
+        answer: 'Absolutely. We’re certified to install EV chargers for all brands, including Tesla, ChargePoint, and other major models. Whether for your home or business, we ensure your EV charger is safely installed and up to code.'
+      },
+      {
+        question: 'What makes 828 Electric different from other electricians in El Paso?',
+        answer: 'We’re a family-owned and operated business with over 8 years of experience and a long-standing BBB accreditation. We believe in integrity, transparency, and doing the job right the first time – so our customers can trust us for life.'
+      }
+    ]
+  },
+  es: {
+    navigation: [
+      { label: 'INICIO', href: '#' },
+      { label: 'NOSOTROS', href: '#about' },
+      { label: 'SERVICIOS', href: '#services' },
+      { label: 'PREGUNTAS', href: '#faq' },
+      { label: 'RESEÑAS', href: '#reviews' }
+    ],
+    categories: {
+      all: 'TODO',
+      residential: 'RESIDENCIAL',
+      commercial: 'COMERCIAL',
+      specialty: 'ESPECIALIDAD'
+    },
+    hero: {
+      badge: 'Colosenses 3:23',
+      titleLine1: 'Electricistas de Confianza.',
+      titleLine2: 'Soluciones Eléctricas',
+      titleLine3: 'para Hogares y Negocios.',
+      description: 'En 828 Electric ofrecemos servicios profesionales comerciales y residenciales en El Paso. Desde paneles y medidores hasta carga para vehículos eléctricos, hacemos el trabajo bien desde la primera vez.',
+      primaryCta: 'Llama al (915) 213-7178',
+      secondaryCta: 'Ver Nuestros Servicios',
+      stats: [
+        { val: '8+', label: 'Años de Experiencia' },
+        { val: 'A+', label: 'Calificación BBB' },
+        { val: 'Top 5', label: 'El Paso Magazine' }
+      ],
+      floatingBadgeTitle: 'Estándar Reconocido',
+      floatingBadgeSubtitle: 'Clasificados entre los 5 mejores electricistas de El Paso'
+    },
+    about: {
+      eyebrow: 'SOBRE NOSOTROS',
+      heading: 'Los Mejores Electricistas de Texas',
+      description: 'En 828 Electric estamos orgullosos de ser una empresa eléctrica familiar que atiende el área de El Paso desde hace más de ocho años. Nuestros electricistas licenciados y asegurados ofrecen servicios eléctricos comerciales y residenciales de confianza.',
+      cards: [
+        {
+          title: 'Familia Propietaria y Operada',
+          desc: 'Durante más de 8 años, nuestra familia ha energizado hogares y negocios en El Paso. Tratamos cada proyecto como si fuera para nuestra propia casa.',
+          img: 'awardTeam'
+        },
+        {
+          title: 'Licenciados, Asegurados y Acreditados por BBB',
+          desc: 'Estamos completamente licenciados, asegurados y acreditados por la Better Business Bureau con 8 años de servicio confiable. Trabajo profesional, hecho bien desde la primera vez.',
+          img: 'solarWiring'
+        },
+        {
+          title: 'Top 5 de los Mejores Electricistas en El Paso',
+          desc: 'Reconocidos por El Paso Magazine por nuestra calidad y satisfacción del cliente. Con la confianza de familias y negocios desde 2017.',
+          img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400'
+        }
+      ]
+    },
+    servicesSection: {
+      eyebrow: '¿QUÉ OFRECEMOS?',
+      heading: 'Servicios Eléctricos Confiables',
+      description: 'Desde reparaciones residenciales hasta instalaciones comerciales de gran escala, nuestros electricistas licenciados y asegurados se especializan en mantener su propiedad segura y eficiente.',
+      explore: 'Ver Detalles',
+      serviceBadge: 'Servicio',
+      detailsTitle: 'Lo Que Brindamos:',
+      close: 'Cerrar Detalles',
+      viewDetails: 'Ver Detalles'
+    },
+    faq: {
+      eyebrow: 'PREGUNTAS POPULARES',
+      heading: 'Obtenga Respuestas a Sus Preguntas',
+      description: 'Los proyectos eléctricos suelen generar muchas preguntas. Aquí encontrará respuestas a algunas de las más comunes que hacen nuestros clientes en El Paso. ¿Aún necesita ayuda? Llámenos y le guiaremos.',
+      button: 'Llama al (915) 213-7178'
+    },
+    reviews: {
+      eyebrow: 'TESTIMONIOS',
+      heading: 'Lo Que Dicen Nuestros Clientes',
+      description: 'No crean solo en nuestra palabra. Esto es lo que piensan los propietarios de viviendas y negocios de El Paso sobre nuestros servicios.',
+      verified: 'Cliente Verificado'
+    },
+    cta: {
+      eyebrow: 'PONTE EN CONTACTO',
+      heading: 'Permítanos Ayudarle con Todas Sus Necesidades Eléctricas',
+      description: 'Ofrecemos un trabajo eléctrico rápido, seguro y conforme a código en El Paso, Texas. ¿Tiene una pregunta o necesita un presupuesto? ¡Llámenos directamente!',
+      callNow: 'Llámanos Ahora',
+      officeAddress: 'Dirección de la Oficina',
+      address: '8086 Alameda Ave, El Paso TX'
+    },
+    footer: {
+      quickLinks: 'Enlaces Rápidos',
+      home: 'Inicio',
+      aboutUs: 'Sobre Nosotros',
+      servicesGrid: 'Servicios',
+      faqs: 'Preguntas Frecuentes',
+      contactDetails: 'Detalles de Contacto',
+      primary: 'Principal: (915) 213-7178',
+      secondary: 'Secundario: (915) 271-9524',
+      followUs: 'Síganos',
+      copyright: '© {year} 828 Electric. Todos los derechos reservados.',
+      privacy: 'Política de Privacidad',
+      terms: 'Términos y Condiciones'
+    },
+    services: [
+      {
+        id: 'wiring',
+        title: 'Cableado Comercial y Residencial',
+        description: 'Instalación y mantenimiento eléctrico integral para hogares y negocios.',
+        categories: ['residential', 'commercial'],
+        details: ['Reconexión completa de casa', 'Solución de problemas y reparaciones', 'Instalación de nuevos tomacorrientes e interruptores', 'Instalaciones de tomacorrientes GFCI']
+      },
+      {
+        id: 'meter',
+        title: 'Instalación de Nuevo Medidor',
+        description: 'Instalación segura y conforme a código de medidores y paneles de servicio.',
+        categories: ['residential', 'commercial', 'specialty'],
+        details: ['Traslado de cajas de medidores', 'Conexiones de energía temporal', 'Mejoras de mástiles de servicio', 'Coordinación con servicios públicos']
+      },
+      {
+        id: 'ev',
+        title: 'Instalación de Cargadores para Vehículos Eléctricos',
+        description: 'Instalación certificada para Tesla, ChargePoint y todas las marcas de vehículos eléctricos.',
+        categories: ['residential', 'commercial', 'specialty'],
+        details: ['Instalación de Tesla Wall Connector', 'Instalaciones de nivel 2', 'Evaluaciones de carga eléctrica', 'Circuitos dedicados']
+      },
+      {
+        id: 'landscape',
+        title: 'Iluminación de Exterior y Paisajismo',
+        categories: ['residential'],
+        description: 'Cree un espacio exterior impresionante y seguro con iluminación resistente al clima.',
+        details: ['Iluminación de patio de bajo voltaje', 'Luces de senderos y arquitectura', 'Reflectores con sensor de movimiento', 'Controles inteligentes por temporizador']
+      },
+      {
+        id: 'panel',
+        title: 'Actualizaciones de Paneles',
+        description: 'Aumente la capacidad eléctrica de forma segura con paneles de breakers modernos.',
+        categories: ['residential', 'commercial'],
+        details: ['Actualizaciones de 100A a 200A', 'Reemplazo de cajas de fusibles', 'Instalaciones de subpaneles', 'Reemplazo de breakers']
+      },
+      {
+        id: 'lighting',
+        title: 'Soluciones de Iluminación',
+        description: 'Ventiladores de techo, iluminación empotrada, iluminación de patio y alberca, y más.',
+        categories: ['residential'],
+        details: ['Iluminación empotrada LED', 'Instalación de ventiladores', 'Colgaduras de candelabros y pendientes', 'Actualizaciones de interruptores dimmers']
+      }
+    ],
+    testimonials: [
+      {
+        id: 1,
+        name: 'Brian P.',
+        text: '¡828 Electric es fantástico! Llamé justo después del cierre y aun así me atendieron enseguida. Los técnicos llegaron a mi casa temprano en la mañana para diagnosticar un problema eléctrico. Trabajaron rápido, lo solucionaron y fueron muy profesionales y amables.',
+        rating: 5,
+        source: 'Reseña de Google'
+      },
+      {
+        id: 2,
+        name: 'Francisco O.',
+        text: 'Angel es profesional, puntual y confiable. Muy recomendable. Angel y su empresa son súper profesionales y honestos. Trabajo muy bien con ellos.',
+        rating: 5,
+        source: 'Reseña de Google'
+      },
+      {
+        id: 3,
+        name: 'Carlo Q.',
+        text: 'Trabajar con el equipo de 828 siempre ha sido fantástico. Los hemos contratado en muchos proyectos y siempre han sido justos, puntuales y un placer trabajar con ellos. Recomiendo ampliamente 828 para trabajos eléctricos residenciales y comerciales.',
+        rating: 5,
+        source: 'Reseña de Google'
+      },
+      {
+        id: 4,
+        name: 'Eli',
+        text: 'Angel nos explicó todo el proceso con claridad. Javy fue excelente en la instalación y lo explicó todo con detalle. El equipo fue muy profesional.',
+        rating: 5,
+        source: 'Reseña de Google'
+      }
+    ],
+    faqs: [
+      {
+        question: '¿Ofrecen cotizaciones gratis?',
+        answer: 'No, no ofrecemos cotizaciones gratis. Sin embargo, puede llamar para hablar con uno de nuestros electricistas licenciados, quienes pueden ofrecer un rango de precio estimado por teléfono. Para evaluaciones en sitio, programamos citas para asegurar valoraciones precisas y profesionales.'
+      },
+      {
+        question: '¿Sus electricistas están licenciados y asegurados?',
+        answer: '¡Sí! Todos nuestros electricistas son profesionales plenamente licenciados y asegurados. En 828 Electric LLC, nos enorgullece ofrecer trabajos eléctricos seguros y conformes a código, tanto para proyectos residenciales como comerciales.'
+      },
+      {
+        question: '¿Qué tipos de trabajos eléctricos manejan?',
+        answer: 'Manejamos todos los servicios eléctricos comerciales y residenciales, incluyendo actualizaciones de paneles, instalaciones de nuevos medidores, configuraciones de cargadores de vehículos eléctricos, instalaciones de ventiladores de techo, iluminación empotrada, iluminación de paisaje y patio, y más.'
+      },
+      {
+        question: '¿Instalan cargadores para vehículos eléctricos?',
+        answer: 'Claro. Estamos certificados para instalar cargadores de vehículos eléctricos de todas las marcas, incluyendo Tesla, ChargePoint y otros modelos importantes. Ya sea para su hogar o negocio, aseguramos que su cargador se instale de forma segura y conforme a código.'
+      },
+      {
+        question: '¿Qué hace diferente a 828 Electric de otros electricistas en El Paso?',
+        answer: 'Somos una empresa familiar con más de 8 años de experiencia y una acreditación BBB de larga trayectoria. Creemos en la integridad, la transparencia y hacer el trabajo bien desde la primera vez para que nuestros clientes puedan confiar en nosotros toda la vida.'
+      }
+    ]
+  }
+} as const
+
 export default function App() {
   const shouldReduceMotion = useReducedMotion()
   const { scrollY } = useScroll()
@@ -52,6 +453,9 @@ export default function App() {
   // Navigation states
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [language, setLanguage] = useState<Locale>('en')
+  const t = content[language]
+  const toggleLanguage = () => setLanguage((current) => current === 'en' ? 'es' : 'en')
   
   // Signature Moment states
   const [activeCategory, setActiveCategory] = useState<'all' | 'residential' | 'commercial' | 'specialty'>('all')
@@ -60,137 +464,35 @@ export default function App() {
   // FAQ states
   const [openFAQIndex, setOpenFAQIndex] = useState<number | null>(0)
 
-  // Form submission state
-  const [formSubmitted, setFormSubmitted] = useState(false)
-  const [formData, setFormData] = useState({ name: '', phone: '', email: '', message: '', serviceType: 'Residential' })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
   // Testimonials carousel index
   const [activeReviewIndex, setActiveReviewIndex] = useState(0)
 
   // Scroll event observer
   useEffect(() => {
+    document.documentElement.lang = language
     return scrollY.onChange((latest) => {
       setIsScrolled(latest > 80)
     })
-  }, [scrollY])
-
-  // Form submit handler
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!formData.name || !formData.phone) return
-    setIsSubmitting(true)
-    setTimeout(() => {
-      setIsSubmitting(false)
-      setFormSubmitted(true)
-    }, 1500)
-  }
+  }, [language, scrollY])
 
   // Data declarations
-  const services: Service[] = [
-    {
-      id: 'wiring',
-      title: 'Commercial & Residential Wiring',
-      description: 'Full-service electrical installation and maintenance for homes and businesses.',
-      categories: ['residential', 'commercial'],
-      image: 'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?auto=format&fit=crop&q=80&w=800',
-      details: ['Complete house rewiring', 'Troubleshooting & repairs', 'New outlet & switch installations', 'GFCI outlet setups']
-    },
-    {
-      id: 'meter',
-      title: 'New Meter Installation',
-      description: 'Safe, code-compliant meter and service panel setup.',
-      categories: ['residential', 'commercial', 'specialty'],
-      image: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&q=80&w=800',
-      details: ['Meter box relocations', 'Temporary power connections', 'Service mast upgrades', 'Utility coordination']
-    },
-    {
-      id: 'ev',
-      title: 'EV Charger Installation',
-      description: 'Certified installation for Tesla, ChargePoint, and all EV brands.',
-      categories: ['residential', 'commercial', 'specialty'],
-      image: 'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&q=80&w=800',
-      details: ['Tesla Wall Connector setup', 'Level 2 EV installations', 'Electrical load assessments', 'Dedicated circuit setups']
-    },
-    {
-      id: 'landscape',
-      title: 'Landscape & Outdoor Lighting',
-      categories: ['residential'],
-      description: 'Create a stunning and secure outdoor space with weatherproof lighting.',
-      image: 'https://images.unsplash.com/photo-1565538810844-1e119ab60ffc?auto=format&fit=crop&q=80&w=800',
-      details: ['Low-voltage patio lighting', 'Pathway & architectural lights', 'Motion sensor floodlights', 'Smart timer controls']
-    },
-    {
-      id: 'panel',
-      title: 'Panel Upgrades',
-      description: 'Increase your electrical capacity safely with modern breaker panels.',
-      categories: ['residential', 'commercial'],
-      image: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&q=80&w=800',
-      details: ['100A to 200A upgrades', 'Fuse box replacements', 'Subpanel installations', 'Breaker replacements']
-    },
-    {
-      id: 'lighting',
-      title: 'Lighting Solutions',
-      description: 'Ceiling fans, recessed lighting, patio and pool lighting, and more.',
-      categories: ['residential'],
-      image: 'https://images.unsplash.com/photo-1565814636199-ae8133055c1c?auto=format&fit=crop&q=80&w=800',
-      details: ['LED recessed lighting', 'Ceiling fan installs', 'Chandelier & pendant hanging', 'Dimmer switch upgrades']
-    }
-  ]
+  const services: Service[] = t.services.map((service, index) => ({
+    id: service.id,
+    title: service.title,
+    description: service.description,
+    categories: [...service.categories] as Service['categories'],
+    image: [wiringHands, meterInstall, evCharger, patioLighting, solarInstall, outletInstall][index],
+    details: [...service.details]
+  }))
 
-  const testimonials: Testimonial[] = [
-    {
-      id: 1,
-      name: 'Brian P.',
-      text: '¡828 Electric es genial! Llamé justo después de que cerraran y aun así me atendieron enseguida. Los técnicos vinieron a mi casa a primera hora de la mañana para diagnosticar un problema eléctrico. Trabajaron rápido, solucionaron el problema y todos fueron profesionales y muy amables.',
-      rating: 5,
-      source: 'Google Review'
-    },
-    {
-      id: 2,
-      name: 'Francisco O.',
-      text: 'Angel is professional, on time and trustworthy. Highly recommended. Angel y su compañia son super profesionales y honestos. Trabajo muy bien con ellos.',
-      rating: 5,
-      source: 'Google Review'
-    },
-    {
-      id: 3,
-      name: 'Carlo Q.',
-      text: 'Trabajar con el equipo de 828 siempre ha sido fantástico. Los hemos contratado en muchos proyectos y siempre han sido justos, puntuales y un placer trabajar con ellos. Recomiendo ampliamente 828 para trabajos eléctricos residenciales y comerciales.',
-      rating: 5,
-      source: 'Google Review'
-    },
-    {
-      id: 4,
-      name: 'Eli',
-      text: 'Angel nos explicó todo el proceso de la consulta. Javy fue excelente con la instalación y lo explicó todo con detalle. El equipo fue muy profesional.',
-      rating: 5,
-      source: 'Google Review'
-    }
-  ]
+  const formatCategoryLabel = (category: Service['categories'][number]) => {
+    if (category === 'residential') return language === 'en' ? 'Residential' : 'Residencial'
+    if (category === 'commercial') return language === 'en' ? 'Commercial' : 'Comercial'
+    return language === 'en' ? 'Specialty' : 'Especialidad'
+  }
 
-  const faqs: FAQItem[] = [
-    {
-      question: 'Do you offer free estimates?',
-      answer: 'No, we do not offer free estimates. However, you can call to speak with one of our licensed electricians who can provide an estimated price range over the phone. For on-site evaluations, we schedule appointments to ensure accurate, professional assessments.'
-    },
-    {
-      question: 'Are your electricians licensed and insured?',
-      answer: 'Yes! All of our electricians are fully licensed and insured professionals. At 828 Electric LLC, we take pride in delivering safe, code-compliant electrical work for both residential and commercial projects.'
-    },
-    {
-      question: 'What types of electrical work do you handle?',
-      answer: 'We handle all commercial and residential electrical services, including panel upgrades, new meter installations, EV charger setups, ceiling fan installations, recessed lighting, landscape and patio lighting, and more.'
-    },
-    {
-      question: 'Do you install EV chargers?',
-      answer: 'Absolutely. We’re certified to install EV chargers for all brands, including Tesla, ChargePoint, and other major models. Whether for your home or business, we ensure your EV charger is safely installed and up to code.'
-    },
-    {
-      question: 'What makes 828 Electric different from other electricians in El Paso?',
-      answer: 'We’re a family-owned and operated business with over 8 years of experience and a long-standing BBB accreditation. We believe in integrity, transparency, and doing the job right the first time – so our customers can trust us for life.'
-    }
-  ]
+  const testimonials: Testimonial[] = t.testimonials as unknown as Testimonial[]
+  const faqs: FAQItem[] = t.faqs as unknown as FAQItem[]
 
   // Filtered services
   const filteredServices = activeCategory === 'all' 
@@ -233,24 +535,18 @@ export default function App() {
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <a href="#" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-lg bg-brand-red flex items-center justify-center text-white transition-transform group-hover:scale-110">
-              <Zap className="w-6 h-6 fill-current" />
-            </div>
-            <div className="flex flex-col">
-              <span className={`font-display font-extrabold text-lg tracking-wider leading-none ${isScrolled ? 'text-brand-dark' : 'text-white'}`}>8/28</span>
-              <span className={`font-display font-semibold text-xs tracking-widest ${isScrolled ? 'text-brand-red' : 'text-brand-red-light'}`}>ELECTRIC</span>
-            </div>
+            <img 
+              src={logo} 
+              alt="828 Electric Logo" 
+              className={`h-9 w-auto transition-all group-hover:scale-105 ${
+                isScrolled ? '' : 'brightness-0 invert'
+              }`} 
+            />
           </a>
 
           {/* Desktop Nav Links */}
           <div className="hidden lg:flex items-center gap-8 font-display font-semibold text-sm">
-            {[
-              { label: 'HOME', href: '#' },
-              { label: 'ABOUT', href: '#about' },
-              { label: 'SERVICES', href: '#services' },
-              { label: 'FAQ', href: '#faq' },
-              { label: 'REVIEWS', href: '#reviews' }
-            ].map((link) => (
+            {t.navigation.map((link) => (
               <a 
                 key={link.label}
                 href={link.href}
@@ -267,7 +563,19 @@ export default function App() {
             ))}
           </div>
 
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-3">
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              className={`rounded-full border px-3 py-2 text-sm font-semibold backdrop-blur transition-colors ${
+                isScrolled
+                  ? 'border-brand-gray-border bg-brand-gray-light text-brand-charcoal hover:bg-brand-gray-border'
+                  : 'border-white/20 bg-white/10 text-white hover:bg-white/20'
+              }`}
+              aria-label="Switch language"
+            >
+              {language === 'en' ? 'ES' : 'EN'}
+            </button>
             <a 
               href="tel:+19152137178"
               className="flex items-center gap-2 font-display font-bold text-sm bg-brand-red text-white py-2.5 px-5 rounded-full transition-transform hover:scale-105 shadow-md shadow-brand-red/10 hover:shadow-brand-red/35 active:scale-95"
@@ -310,10 +618,11 @@ export default function App() {
               <div>
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-2">
-                    <div className="w-9 h-9 rounded-lg bg-brand-red flex items-center justify-center text-white">
-                      <Zap className="w-5 h-5 fill-current" />
-                    </div>
-                    <span className="font-display font-extrabold text-brand-dark text-lg leading-none">8/28 ELECTRIC</span>
+                    <img 
+                      src={logo} 
+                      alt="828 Electric Logo" 
+                      className="h-8 w-auto" 
+                    />
                   </div>
                   <button 
                     onClick={() => setMobileMenuOpen(false)}
@@ -324,13 +633,7 @@ export default function App() {
                 </div>
 
                 <div className="flex flex-col gap-6 font-display font-semibold text-base text-brand-charcoal">
-                  {[
-                    { label: 'HOME', href: '#' },
-                    { label: 'ABOUT', href: '#about' },
-                    { label: 'SERVICES', href: '#services' },
-                    { label: 'FAQ', href: '#faq' },
-                    { label: 'REVIEWS', href: '#reviews' }
-                  ].map((link) => (
+                  {t.navigation.map((link) => (
                     <a 
                       key={link.label}
                       href={link.href}
@@ -344,15 +647,22 @@ export default function App() {
               </div>
 
               <div className="flex flex-col gap-4">
+                <button
+                  type="button"
+                  onClick={toggleLanguage}
+                  className="rounded-full border border-brand-gray-border px-4 py-2 text-sm font-semibold text-brand-charcoal transition-colors hover:bg-brand-gray-light"
+                >
+                  {language === 'en' ? 'Cambiar a Español' : 'Switch to English'}
+                </button>
                 <a 
                   href="tel:+19152137178"
                   className="flex items-center justify-center gap-2 bg-brand-red text-white py-3 px-6 rounded-xl font-display font-bold hover:bg-brand-red-dark transition-colors"
                 >
                   <Phone className="w-5 h-5" />
-                  <span>Call (915) 213-7178</span>
+                  <span>{t.hero.primaryCta}</span>
                 </a>
                 <p className="text-xs text-brand-charcoal/60 text-center font-display">
-                  Serving El Paso & surrounding areas.
+                  {language === 'en' ? 'Serving El Paso & surrounding areas.' : 'Atendemos El Paso y sus alrededores.'}
                 </p>
               </div>
             </motion.div>
@@ -395,25 +705,25 @@ export default function App() {
           >
             <motion.div variants={fadeInUp} className="inline-flex items-center justify-center lg:justify-start gap-2 bg-white/10 backdrop-blur-md border border-white/20 py-1.5 px-4 rounded-full text-brand-red-light font-display font-semibold text-xs tracking-wider mb-6 w-fit mx-auto lg:mx-0">
               <ShieldCheck className="w-4 h-4" />
-              <span>LICENSED & INSURED ELECTRICAL CONTRACTORS</span>
+              <span>{t.hero.badge}</span>
             </motion.div>
 
             <motion.h1 
               variants={fadeInUp}
               className="font-display font-extrabold text-[clamp(2.5rem,5.5vw,4.5rem)] leading-[1.1] tracking-tight mb-6"
             >
-              Trustworthy Electricians. <br />
+              {t.hero.titleLine1} <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-red-light via-brand-red to-white">
-                Electrical Solutions
+                {t.hero.titleLine2}
               </span><br />
-              for Homes & Business.
+              {t.hero.titleLine3}
             </motion.h1>
 
             <motion.p 
               variants={fadeInUp}
               className="text-lg text-white/80 max-w-xl mb-8 leading-relaxed font-light mx-auto lg:mx-0"
             >
-              At 828 Electric, we provide professional commercial and residential services in El Paso. From panels and meters to EV charging, we get the job done right the first time.
+              {t.hero.description}
             </motion.p>
 
             <motion.div 
@@ -434,7 +744,7 @@ export default function App() {
                   className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none"
                 />
                 <Phone className="w-5 h-5 fill-current" />
-                <span>Call (915) 213-7178</span>
+                <span>{t.hero.primaryCta}</span>
               </motion.a>
 
               <motion.a 
@@ -443,7 +753,7 @@ export default function App() {
                 whileTap={{ scale: 0.98 }}
                 className="w-full sm:w-auto bg-white/10 hover:bg-white/15 border border-white/20 py-4 px-8 rounded-xl font-display font-bold text-base flex items-center justify-center gap-2 transition-colors"
               >
-                <span>View Our Services</span>
+                <span>{t.hero.secondaryCta}</span>
                 <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
               </motion.a>
             </motion.div>
@@ -453,11 +763,7 @@ export default function App() {
               variants={fadeInUp}
               className="grid grid-cols-3 gap-6 pt-12 mt-12 border-t border-white/10 max-w-lg mx-auto lg:mx-0"
             >
-              {[
-                { val: '8+', label: 'Years Experience' },
-                { val: 'A+', label: 'BBB Rating' },
-                { val: 'Top 5', label: 'El Paso Magazine' }
-              ].map((m) => (
+              {t.hero.stats.map((m) => (
                 <div key={m.label} className="text-center lg:text-left">
                   <div className="font-display font-black text-2xl lg:text-3xl text-brand-red-light">{m.val}</div>
                   <div className="text-xs text-white/60 uppercase tracking-widest mt-1 font-semibold">{m.label}</div>
@@ -476,7 +782,7 @@ export default function App() {
             <div className="relative w-full max-w-[450px] aspect-[4/5] rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50 group">
               <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent z-10" />
               <img 
-                src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&q=80&w=800" 
+                src={constructionWorker} 
                 alt="828 Electric Professional Work" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
@@ -491,8 +797,8 @@ export default function App() {
                   <Award className="w-7 h-7" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="font-display font-bold text-sm text-white">Award-Winning Standard</span>
-                  <span className="text-xs text-white/60">Ranked Top 5 Best Electricians in El Paso</span>
+                  <span className="font-display font-bold text-sm text-white">{t.hero.floatingBadgeTitle}</span>
+                  <span className="text-xs text-white/60">{t.hero.floatingBadgeSubtitle}</span>
                 </div>
               </motion.div>
             </div>
@@ -512,13 +818,13 @@ export default function App() {
             variants={fadeInUp}
             className="text-center max-w-2xl mx-auto mb-16"
           >
-            <span className="font-display font-bold text-brand-red tracking-widest text-xs uppercase block mb-3">ABOUT US</span>
+            <span className="font-display font-bold text-brand-red tracking-widest text-xs uppercase block mb-3">{t.about.eyebrow}</span>
             <h2 className="font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight mb-4">
-              Top Electricians in Texas
+              {t.about.heading}
             </h2>
             <div className="w-16 h-1 bg-brand-red mx-auto mb-6 rounded-full" />
             <p className="text-brand-charcoal text-base md:text-lg leading-relaxed">
-              At 828 Electric, we’re proud to be a family-owned and operated electrical company serving the El Paso area for over eight years. Our licensed and insured electricians provide dependable commercial and residential electrical services.
+              {t.about.description}
             </p>
           </motion.div>
 
@@ -530,47 +836,33 @@ export default function App() {
             variants={staggerContainer}
             className="grid md:grid-cols-3 gap-8"
           >
-            {[
-              {
-                title: 'Family-Owned & Operated',
-                desc: 'For over 8 years, our family has proudly powered homes and businesses across El Paso. We treat every project like it’s for our own home.',
-                icon: <ThumbsUp className="w-6 h-6" />,
-                img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=400'
-              },
-              {
-                title: 'Licensed, Insured & BBB Accredited',
-                desc: 'We’re fully licensed, insured, and accredited by the Better Business Bureau with 8 years of trusted service. Professional work, done right the first time.',
-                icon: <ShieldCheck className="w-6 h-6" />,
-                img: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=400'
-              },
-              {
-                title: 'Top 5 Best Electricians in El Paso',
-                desc: 'Recognized by El Paso Magazine for our quality and customer satisfaction. Trusted by families and businesses since 2017.',
-                icon: <Award className="w-6 h-6" />,
-                img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400'
-              }
-            ].map((card) => (
-              <motion.div 
-                key={card.title}
-                variants={fadeInUp}
-                whileHover={{ y: -8, boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' }}
-                transition={springTransition}
-                className="bg-brand-white border border-brand-gray-border rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between"
-              >
-                <div className="relative h-48 overflow-hidden">
-                  <img src={card.img} alt={card.title} className="w-full h-full object-cover" />
-                  <div className="absolute top-4 left-4 w-10 h-10 rounded-xl bg-brand-red text-white flex items-center justify-center shadow-lg">
-                    {card.icon}
+            {t.about.cards.map((card, index) => {
+              const images = [awardTeam, solarWiring, 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400']
+              const icons = [<ThumbsUp className="w-6 h-6" />, <ShieldCheck className="w-6 h-6" />, <Award className="w-6 h-6" />]
+              const positions = ['object-top', 'object-center', 'object-center']
+              return (
+                <motion.div 
+                  key={card.title}
+                  variants={fadeInUp}
+                  whileHover={{ y: -8, boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' }}
+                  transition={springTransition}
+                  className="bg-brand-white border border-brand-gray-border rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between"
+                >
+                  <div className="relative h-64 overflow-hidden">
+                    <img src={images[index]} alt={card.title} className={`w-full h-full object-cover ${positions[index]}`} />
+                    <div className="absolute top-4 left-4 w-10 h-10 rounded-xl bg-brand-red text-white flex items-center justify-center shadow-lg">
+                      {icons[index]}
+                    </div>
                   </div>
-                </div>
-                <div className="p-6 flex-grow flex flex-col justify-between">
-                  <div>
-                    <h3 className="font-display font-extrabold text-lg text-brand-dark mb-3">{card.title}</h3>
-                    <p className="text-sm text-brand-charcoal/80 leading-relaxed font-light">{card.desc}</p>
+                  <div className="p-6 flex-grow flex flex-col justify-between">
+                    <div>
+                      <h3 className="font-display font-extrabold text-lg text-brand-dark mb-3">{card.title}</h3>
+                      <p className="text-sm text-brand-charcoal/80 leading-relaxed font-light">{card.desc}</p>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              )
+            })}
           </motion.div>
         </div>
       </section>
@@ -581,13 +873,13 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <span className="font-display font-bold text-brand-red tracking-widest text-xs uppercase block mb-3">WHAT DO WE OFFER?</span>
+            <span className="font-display font-bold text-brand-red tracking-widest text-xs uppercase block mb-3">{t.servicesSection.eyebrow}</span>
             <h2 className="font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight mb-4">
-              Reliable Electric Services
+              {t.servicesSection.heading}
             </h2>
             <div className="w-16 h-1 bg-brand-red mx-auto mb-6 rounded-full" />
             <p className="text-brand-charcoal text-base">
-              From residential repairs to large-scale commercial installations, our licensed and insured electricians specialize in keeping your property safe and efficient.
+              {t.servicesSection.description}
             </p>
           </div>
 
@@ -606,37 +898,34 @@ export default function App() {
                     : 'bg-brand-gray-light border-brand-gray-border text-brand-charcoal hover:bg-brand-gray-border'
                 }`}
               >
-                {category}
+                {t.categories[category]}
               </button>
             ))}
           </div>
 
-          {/* Staggered dynamic cards container with layoutId */}
+          {/* Stable service cards */}
           <motion.div 
-            layout
             className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
-            <AnimatePresence mode="popLayout">
+            <AnimatePresence>
               {filteredServices.map((service) => (
                 <motion.div
-                  layout
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.4 }}
                   key={service.id}
-                  whileHover={{ y: -8 }}
                   className="bg-brand-gray-light rounded-2xl border border-brand-gray-border overflow-hidden flex flex-col justify-between group shadow-sm hover:shadow-xl hover:border-brand-red/30 transition-all duration-300"
                 >
                   <div className="relative h-56 overflow-hidden">
                     <img 
                       src={service.image} 
                       alt={service.title} 
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
                       <span className="text-white text-xs font-display font-semibold tracking-widest uppercase bg-brand-red py-1 px-3 rounded-full">
-                        {service.categories.join(' / ')}
+                        {service.categories.map(formatCategoryLabel).join(' / ')}
                       </span>
                     </div>
                   </div>
@@ -653,9 +942,9 @@ export default function App() {
 
                     <button 
                       onClick={() => setSelectedService(service)}
-                      className="inline-flex items-center gap-2 font-display font-bold text-xs uppercase tracking-wider text-brand-red hover:text-brand-red-dark group-hover:gap-3 transition-all"
+                      className="inline-flex items-center gap-2 font-display font-bold text-xs uppercase tracking-wider text-brand-red hover:text-brand-red-dark transition-colors"
                     >
-                      <span>Explore Details</span>
+                      <span>{t.servicesSection.viewDetails}</span>
                       <ArrowRight className="w-4 h-4" />
                     </button>
                   </div>
@@ -687,7 +976,7 @@ export default function App() {
               <div>
                 <div className="flex items-center justify-between mb-6">
                   <span className="text-xs font-display font-bold text-brand-red tracking-widest uppercase bg-brand-red/10 px-3 py-1 rounded-full">
-                    {selectedService.categories.join(' / ')} Service
+                    {selectedService.categories.map(formatCategoryLabel).join(' / ')} {t.servicesSection.serviceBadge}
                   </span>
                   <button 
                     onClick={() => setSelectedService(null)}
@@ -705,7 +994,7 @@ export default function App() {
                 </p>
 
                 <div className="mb-6">
-                  <h4 className="font-display font-bold text-sm text-brand-dark mb-3 uppercase tracking-wider">What We Provide:</h4>
+                  <h4 className="font-display font-bold text-sm text-brand-dark mb-3 uppercase tracking-wider">{t.servicesSection.detailsTitle}</h4>
                   <ul className="grid sm:grid-cols-2 gap-3">
                     {selectedService.details.map((detail) => (
                       <li key={detail} className="flex items-start gap-2 text-sm text-brand-charcoal/80">
@@ -729,7 +1018,7 @@ export default function App() {
                   onClick={() => setSelectedService(null)}
                   className="flex-1 border border-brand-gray-border hover:bg-brand-gray-light py-3.5 px-6 rounded-xl font-display font-bold text-sm text-brand-charcoal transition-all"
                 >
-                  Close Details
+                  {t.servicesSection.close}
                 </button>
               </div>
             </motion.div>
@@ -743,13 +1032,13 @@ export default function App() {
         <div className="max-w-7xl mx-auto grid lg:grid-cols-12 gap-12 items-start">
           {/* FAQ Left Block */}
           <div className="lg:col-span-5 flex flex-col justify-center">
-            <span className="font-display font-bold text-brand-red tracking-widest text-xs uppercase block mb-3">POPULAR QUESTIONS</span>
+            <span className="font-display font-bold text-brand-red tracking-widest text-xs uppercase block mb-3">{t.faq.eyebrow}</span>
             <h2 className="font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight mb-6">
-              Get Answers to Your Questions
+              {t.faq.heading}
             </h2>
             <div className="w-16 h-1 bg-brand-red mb-6 rounded-full" />
             <p className="text-brand-charcoal text-base mb-8 font-light leading-relaxed">
-              Electrical projects can raise a lot of questions. Here are answers to some of the most common ones our El Paso customers ask. Still need help? Call us and we will guide you.
+              {t.faq.description}
             </p>
             
             <a 
@@ -757,7 +1046,7 @@ export default function App() {
               className="inline-flex items-center justify-center gap-2 bg-brand-dark text-white py-4 px-6 rounded-xl font-display font-bold text-sm hover:bg-brand-dark-light transition-colors self-start shadow-md"
             >
               <Phone className="w-4.5 h-4.5" />
-              <span>Call (915) 213-7178</span>
+              <span>{t.faq.button}</span>
             </a>
           </div>
 
@@ -815,13 +1104,13 @@ export default function App() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="text-center max-w-2xl mx-auto mb-16">
-            <span className="font-display font-bold text-brand-red tracking-widest text-xs uppercase block mb-3">TESTIMONIALS</span>
+            <span className="font-display font-bold text-brand-red tracking-widest text-xs uppercase block mb-3">{t.reviews.eyebrow}</span>
             <h2 className="font-display font-extrabold text-3xl md:text-4xl text-brand-dark leading-tight mb-4">
-              What Our Clients Say
+              {t.reviews.heading}
             </h2>
             <div className="w-16 h-1 bg-brand-red mx-auto mb-6 rounded-full" />
             <p className="text-brand-charcoal text-base">
-              Don’t take our word for it. Here is what homeowners and business owners across El Paso think of our services.
+              {t.reviews.description}
             </p>
           </div>
 
@@ -860,7 +1149,7 @@ export default function App() {
                           {testimonials[activeReviewIndex].name}
                         </div>
                         <div className="text-xs text-brand-charcoal/60 uppercase tracking-widest font-semibold">
-                          Verified Client
+                          {t.reviews.verified}
                         </div>
                       </div>
                     </div>
@@ -892,18 +1181,18 @@ export default function App() {
         {/* Particle Field Overlay */}
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
 
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-12 gap-12 items-center relative z-10">
+        <div className="max-w-6xl mx-auto relative z-10">
           {/* CTA Info */}
-          <div className="lg:col-span-6 text-center lg:text-left">
-            <span className="font-display font-bold text-brand-red-light tracking-widest text-xs uppercase block mb-3">GET IN TOUCH</span>
+          <div className="text-center">
+            <span className="font-display font-bold text-brand-red-light tracking-widest text-xs uppercase block mb-3">{t.cta.eyebrow}</span>
             <h2 className="font-display font-extrabold text-3xl md:text-4xl leading-tight mb-6">
-              Let Us Assist with All Your Electrical Needs
+              {t.cta.heading}
             </h2>
-            <p className="text-white/70 text-base mb-8 font-light leading-relaxed">
-              We offer fast, safe, and code-compliant electrical work across El Paso, Texas. Have a question or need a budget estimate? Fill out our form, or call us directly!
+            <p className="text-white/70 text-base mb-8 font-light leading-relaxed max-w-2xl mx-auto">
+              {t.cta.description}
             </p>
             
-            <div className="flex flex-col gap-4 max-w-sm mx-auto lg:mx-0">
+            <div className="flex flex-col gap-4 max-w-sm mx-auto">
               <a 
                 href="tel:+19152137178"
                 className="flex items-center gap-3 bg-brand-red hover:bg-brand-red-dark text-white py-3.5 px-6 rounded-xl font-display font-bold transition-all shadow-lg shadow-brand-red/15"
@@ -912,7 +1201,7 @@ export default function App() {
                   <Phone className="w-4 h-4 text-white" />
                 </div>
                 <div>
-                  <div className="text-[10px] text-white/60 text-left uppercase leading-none font-bold">Call Now</div>
+                  <div className="text-[10px] text-white/60 text-left uppercase leading-none font-bold">{t.cta.callNow}</div>
                   <div className="text-base font-display font-bold mt-0.5 leading-none">(915) 213-7178</div>
                 </div>
               </a>
@@ -922,132 +1211,11 @@ export default function App() {
                   <MapPin className="w-4 h-4" />
                 </div>
                 <div className="text-left">
-                  <div className="text-[10px] text-white/50 uppercase leading-none font-bold">Office Address</div>
-                  <div className="text-sm font-semibold mt-0.5 leading-none">8086 Alameda Ave, El Paso TX</div>
+                  <div className="text-[10px] text-white/50 uppercase leading-none font-bold">{t.cta.officeAddress}</div>
+                  <div className="text-sm font-semibold mt-0.5 leading-none">{t.cta.address}</div>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* CTA Interactive Form Container */}
-          <div className="lg:col-span-6 w-full">
-            <motion.div 
-              layout
-              className="bg-brand-dark-light border border-white/10 p-6 md:p-8 rounded-3xl shadow-2xl relative"
-            >
-              <AnimatePresence mode="wait">
-                {!formSubmitted ? (
-                  <motion.form
-                    key="form"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    onSubmit={handleSubmit}
-                    className="flex flex-col gap-5"
-                  >
-                    <div>
-                      <h3 className="font-display font-extrabold text-xl mb-1">Request a Phone Consultation</h3>
-                      <p className="text-xs text-white/60 font-light">Tell us briefly about your project for an estimated price range.</p>
-                    </div>
-
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div className="flex flex-col gap-2">
-                        <label className="text-xs text-white/70 font-semibold uppercase tracking-wider">Your Name *</label>
-                        <input
-                          type="text"
-                          required
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                          className="bg-white/5 border border-white/15 focus:border-brand-red rounded-xl px-4 py-3 text-sm outline-none transition-colors text-white"
-                          placeholder="e.g. John Doe"
-                        />
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-xs text-white/70 font-semibold uppercase tracking-wider">Phone Number *</label>
-                        <input
-                          type="tel"
-                          required
-                          value={formData.phone}
-                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                          className="bg-white/5 border border-white/15 focus:border-brand-red rounded-xl px-4 py-3 text-sm outline-none transition-colors text-white"
-                          placeholder="e.g. (915) 555-0199"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs text-white/70 font-semibold uppercase tracking-wider">Service Needed</label>
-                      <select
-                        value={formData.serviceType}
-                        onChange={(e) => setFormData({ ...formData, serviceType: e.target.value })}
-                        className="bg-brand-dark-light border border-white/15 focus:border-brand-red rounded-xl px-4 py-3 text-sm outline-none transition-colors text-white"
-                      >
-                        <option value="Residential">Residential Wiring & Lighting</option>
-                        <option value="Commercial">Commercial Installations</option>
-                        <option value="Meter">New Meter Setup</option>
-                        <option value="Panel">Panel Upgrades</option>
-                        <option value="EV Charger">EV Charger Installation</option>
-                      </select>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-                      <label className="text-xs text-white/70 font-semibold uppercase tracking-wider">Project Details</label>
-                      <textarea
-                        rows={3}
-                        value={formData.message}
-                        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        className="bg-white/5 border border-white/15 focus:border-brand-red rounded-xl px-4 py-3 text-sm outline-none transition-colors text-white resize-none"
-                        placeholder="Tell us what you need help with..."
-                      />
-                    </div>
-
-                    <motion.button
-                      type="submit"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full bg-brand-red hover:bg-brand-red-dark text-white font-display font-bold py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-brand-red/20 transition-all text-sm uppercase tracking-wider mt-2 disabled:opacity-50"
-                      disabled={isSubmitting}
-                    >
-                      {isSubmitting ? (
-                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      ) : (
-                        <>
-                          <span>Submit Request</span>
-                          <ArrowRight className="w-4 h-4" />
-                        </>
-                      )}
-                    </motion.button>
-                  </motion.form>
-                ) : (
-                  <motion.div
-                    key="success"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    className="flex flex-col items-center justify-center text-center py-8 gap-5"
-                  >
-                    <div className="w-16 h-16 rounded-full bg-brand-red/20 text-brand-red-light flex items-center justify-center mb-2">
-                      <CheckCircle2 className="w-10 h-10 animate-bounce" />
-                    </div>
-                    <div>
-                      <h3 className="font-display font-extrabold text-2xl mb-2 text-white">Thank You, {formData.name}!</h3>
-                      <p className="text-sm text-white/75 leading-relaxed font-light max-w-sm">
-                        Your request for a **{formData.serviceType}** consultation has been received. Our licensed staff will call you at **{formData.phone}** shortly!
-                      </p>
-                    </div>
-                    <button
-                      onClick={() => {
-                        setFormSubmitted(false)
-                        setFormData({ name: '', phone: '', email: '', message: '', serviceType: 'Residential' })
-                      }}
-                      className="border border-white/20 hover:bg-white/10 py-2.5 px-6 rounded-xl font-display font-bold text-xs uppercase tracking-wider transition-colors mt-4 text-white/80 hover:text-white"
-                    >
-                      Submit Another Request
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
           </div>
         </div>
       </section>
@@ -1059,38 +1227,39 @@ export default function App() {
           {/* Brand Col */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
-              <div className="w-9 h-9 rounded-lg bg-brand-red flex items-center justify-center text-white">
-                <Zap className="w-5 h-5 fill-current" />
-              </div>
-              <span className="font-extrabold text-lg tracking-wider uppercase leading-none">8/28 ELECTRIC</span>
+              <img 
+                src={logo} 
+                alt="828 Electric Logo" 
+                className="h-9 w-auto brightness-0 invert" 
+              />
             </div>
             <p className="text-white/60 text-xs font-body font-light leading-relaxed max-w-xs mt-2">
-              Licensed and insured electrical specialists serving El Paso and surrounding communities. Family-owned and operated with over 8 years of trusted expertise.
+              {language === 'en' ? 'Licensed and insured electrical specialists serving El Paso and surrounding communities. Family-owned and operated with over 8 years of trusted expertise.' : 'Especialistas eléctricos licenciados y asegurados que atienden El Paso y sus comunidades vecinas. Familia propietaria y operada con más de 8 años de experiencia de confianza.'}
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-extrabold text-white uppercase tracking-wider text-xs mb-4">Quick Links</h4>
+            <h4 className="font-extrabold text-white uppercase tracking-wider text-xs mb-4">{t.footer.quickLinks}</h4>
             <div className="flex flex-col gap-3 font-medium text-white/70">
-              <a href="#" className="hover:text-brand-red-light transition-colors">Home</a>
-              <a href="#about" className="hover:text-brand-red-light transition-colors">About Us</a>
-              <a href="#services" className="hover:text-brand-red-light transition-colors">Services Grid</a>
-              <a href="#faq" className="hover:text-brand-red-light transition-colors">FAQs</a>
+              <a href="#" className="hover:text-brand-red-light transition-colors">{t.footer.home}</a>
+              <a href="#about" className="hover:text-brand-red-light transition-colors">{t.footer.aboutUs}</a>
+              <a href="#services" className="hover:text-brand-red-light transition-colors">{t.footer.servicesGrid}</a>
+              <a href="#faq" className="hover:text-brand-red-light transition-colors">{t.footer.faqs}</a>
             </div>
           </div>
 
           {/* Contact Details */}
           <div>
-            <h4 className="font-extrabold text-white uppercase tracking-wider text-xs mb-4">Contact Details</h4>
+            <h4 className="font-extrabold text-white uppercase tracking-wider text-xs mb-4">{t.footer.contactDetails}</h4>
             <div className="flex flex-col gap-3 text-white/70 font-body font-light">
               <a href="tel:+19152137178" className="flex items-center gap-2 hover:text-white transition-colors">
                 <Phone className="w-4 h-4 text-brand-red-light" />
-                <span>Primary: (915) 213-7178</span>
+                <span>{t.footer.primary}</span>
               </a>
               <a href="tel:+19152719524" className="flex items-center gap-2 hover:text-white transition-colors">
                 <Phone className="w-4 h-4 text-brand-red-light" />
-                <span>Secondary: (915) 271-9524</span>
+                <span>{t.footer.secondary}</span>
               </a>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-brand-red-light" />
@@ -1101,7 +1270,7 @@ export default function App() {
 
           {/* Socials Col */}
           <div>
-            <h4 className="font-extrabold text-white uppercase tracking-wider text-xs mb-4">Follow Us</h4>
+            <h4 className="font-extrabold text-white uppercase tracking-wider text-xs mb-4">{t.footer.followUs}</h4>
             <div className="flex items-center gap-3">
               <a 
                 href="https://facebook.com" 
@@ -1131,11 +1300,11 @@ export default function App() {
 
         {/* Sub-Footer */}
         <div className="max-w-7xl mx-auto pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-white/40 text-xs">
-          <p>© {new Date().getFullYear()} 828 Electric. All rights reserved.</p>
+          <p>{t.footer.copyright.replace('{year}', String(new Date().getFullYear()))}</p>
           <div className="flex gap-4">
-            <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-white transition-colors">{t.footer.privacy}</a>
             <span>|</span>
-            <a href="#" className="hover:text-white transition-colors">Terms & Conditions</a>
+            <a href="#" className="hover:text-white transition-colors">{t.footer.terms}</a>
           </div>
         </div>
       </footer>
