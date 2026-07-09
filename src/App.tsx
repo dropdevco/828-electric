@@ -26,9 +26,10 @@ import outletInstall from './assets/outlet-install.jpg'
 import solarWiring from './assets/solar-wiring.jpg'
 import logo from './assets/logo.png'
 import awardTeam from './assets/award-team.jpg'
+import awardStandard from './assets/828-ai.png'
+import top5Electricians from './assets/top-5-electricians.png'
 import meterInstall from './assets/meter-install.jpg'
 import wiringHands from './assets/wiring-hands.jpg'
-import constructionWorker from './assets/construction-worker.jpg'
 
 // Define the Service type
 interface Service {
@@ -832,9 +833,9 @@ export default function App() {
             <div className="relative w-full max-w-[450px] aspect-[4/5] rounded-3xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50 group">
               <div className="absolute inset-0 bg-gradient-to-t from-brand-dark via-transparent to-transparent z-10" />
               <img 
-                src={constructionWorker} 
+                src={awardStandard} 
                 alt="828 Electric Professional Work" 
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
               />
               
               {/* Floating Overlay Badge */}
@@ -887,7 +888,7 @@ export default function App() {
             className="grid md:grid-cols-3 gap-8"
           >
             {t.about.cards.map((card, index) => {
-              const images = [awardTeam, solarWiring, 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=400']
+              const images = [awardTeam, solarWiring, top5Electricians]
               const icons = [<ThumbsUp className="w-6 h-6" />, <ShieldCheck className="w-6 h-6" />, <Award className="w-6 h-6" />]
               const positions = ['object-top', 'object-center', 'object-center']
               return (
