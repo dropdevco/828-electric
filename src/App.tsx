@@ -42,11 +42,13 @@ interface Service {
 
 // Define the Testimonial type
 interface Testimonial {
-  id: number
+  id: number | string
   name: string
   text: string
   rating: number
   source: string
+  url?: string
+  relativeTime?: string
 }
 
 // Define the FAQ type
@@ -491,7 +493,55 @@ export default function App() {
     return language === 'en' ? 'Specialty' : 'Especialidad'
   }
 
-  const testimonials: Testimonial[] = t.testimonials as unknown as Testimonial[]
+  // Google Reviews fetching and mapping
+  const [rawGoogleReviews, setRawGoogleReviews] = useState<any[]>([])
+  const [googleStats, setGoogleStats] = useState<{ rating: number; total: number } | null>(null)
+  const [hasLoadedGoogle, setHasLoadedGoogle] = useState(false)
+
+  useEffect(() => {
+    fetch('/api/reviews')
+      .then((res) => {
+        if (!res.ok) throw new Error('Network response error');
+        return res.json();
+      })
+      .then((data) => {
+        if (data.reviews && data.reviews.length > 0) {
+          setRawGoogleReviews(data.reviews);
+          setHasLoadedGoogle(true);
+        }
+        if (data.rating) {
+          setGoogleStats({
+            rating: data.rating,
+            total: data.user_ratings_total || 0
+          });
+        }
+      })
+      .catch((err) => {
+        console.warn('Using local reviews fallback:', err);
+      });
+  }, []);
+
+  const testimonials: Testimonial[] = hasLoadedGoogle && rawGoogleReviews.length > 0
+    ? rawGoogleReviews.map((r: any, i: number) => ({
+        id: `google-${i}`,
+        name: r.author_name,
+        text: r.text,
+        rating: r.rating,
+        source: language === 'en' ? 'Google Review' : 'Reseña de Google',
+        url: r.author_url,
+        relativeTime: r.relative_time_description
+      }))
+    : (t.testimonials as unknown as Testimonial[])
+
+  const safeReviewIndex = testimonials.length > 0 && activeReviewIndex >= testimonials.length ? 0 : activeReviewIndex
+  const currentReview = testimonials[safeReviewIndex] || {
+    id: 0,
+    name: 'Client',
+    text: '',
+    rating: 5,
+    source: 'Review'
+  }
+
   const faqs: FAQItem[] = t.faqs as unknown as FAQItem[]
 
   // Filtered services
@@ -842,7 +892,7 @@ export default function App() {
               const positions = ['object-top', 'object-center', 'object-center']
               return (
                 <motion.div 
-                  key={card.title}
+                  key={index}
                   variants={fadeInUp}
                   whileHover={{ y: -8, boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)' }}
                   transition={springTransition}
@@ -1112,6 +1162,33 @@ export default function App() {
             <p className="text-brand-charcoal text-base">
               {t.reviews.description}
             </p>
+
+            {/* Dynamic Google Reviews Stats Badge */}
+            {googleStats && (
+              <div className="flex justify-center mt-4">
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex items-center gap-3 bg-brand-gray-light border border-brand-gray-border py-2 px-4 rounded-full shadow-sm"
+                >
+                  <div className="flex items-center gap-0.5 text-brand-red">
+                    {[...Array(5)].map((_, i) => {
+                      const isFilled = i < Math.round(googleStats.rating);
+                      return (
+                        <Star 
+                          key={i} 
+                          className={`w-4 h-4 ${isFilled ? 'fill-current' : 'text-brand-charcoal/20'}`} 
+                        />
+                      );
+                    })}
+                  </div>
+                  <span className="text-xs font-display font-bold text-brand-dark">
+                    {googleStats.rating.toFixed(1)} / 5.0 ({googleStats.total} {language === 'en' ? 'Google Reviews' : 'Reseñas de Google'})
+                  </span>
+                </motion.div>
+              </div>
+            )}
           </div>
 
           {/* Testimonial slider layout */}
@@ -1119,7 +1196,7 @@ export default function App() {
             <div className="overflow-hidden">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={activeReviewIndex}
+                  key={safeReviewIndex}
                   initial={{ opacity: 0, x: shouldReduceMotion ? 0 : 50 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: shouldReduceMotion ? 0 : -50 }}
@@ -1129,33 +1206,47 @@ export default function App() {
                   <div>
                     {/* Star Rating */}
                     <div className="flex items-center gap-1 mb-6 text-brand-red">
-                      {[...Array(testimonials[activeReviewIndex].rating)].map((_, i) => (
+                      {[...Array(currentReview.rating)].map((_, i) => (
                         <Star key={i} className="w-5 h-5 fill-current" />
                       ))}
                     </div>
                     {/* Content text */}
                     <p className="text-base md:text-lg text-brand-dark font-light italic leading-relaxed mb-6">
-                      "{testimonials[activeReviewIndex].text}"
+                      "{currentReview.text}"
                     </p>
                   </div>
                   {/* Review Source Info */}
                   <div className="flex items-center justify-between border-t border-brand-gray-border/60 pt-6 mt-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-brand-red/10 text-brand-red flex items-center justify-center font-display font-bold">
-                        {testimonials[activeReviewIndex].name.charAt(0)}
+                        {currentReview.name.charAt(0)}
                       </div>
                       <div>
                         <div className="font-display font-bold text-sm text-brand-dark">
-                          {testimonials[activeReviewIndex].name}
+                          {currentReview.name}
                         </div>
                         <div className="text-xs text-brand-charcoal/60 uppercase tracking-widest font-semibold">
-                          {t.reviews.verified}
+                          {t.reviews.verified} {currentReview.relativeTime && `· ${currentReview.relativeTime}`}
                         </div>
                       </div>
                     </div>
-                    <span className="text-xs font-display font-bold text-brand-red uppercase tracking-wider bg-brand-red/10 py-1 px-3 rounded-full">
-                      {testimonials[activeReviewIndex].source}
-                    </span>
+                    <div className="flex items-center gap-3">
+                      {currentReview.url ? (
+                        <a 
+                          href={currentReview.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-xs font-display font-bold text-brand-red hover:text-brand-red-dark uppercase tracking-wider bg-brand-red/10 hover:bg-brand-red/20 py-1 px-3 rounded-full transition-all flex items-center gap-1"
+                        >
+                          {currentReview.source}
+                          <ArrowRight className="w-3 h-3" />
+                        </a>
+                      ) : (
+                        <span className="text-xs font-display font-bold text-brand-red uppercase tracking-wider bg-brand-red/10 py-1 px-3 rounded-full">
+                          {currentReview.source}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -1167,9 +1258,31 @@ export default function App() {
                 <button
                   key={index}
                   onClick={() => setActiveReviewIndex(index)}
-                  className={`w-3.5 h-3.5 rounded-full transition-all duration-300 ${activeReviewIndex === index ? 'bg-brand-red w-8' : 'bg-brand-gray-border hover:bg-brand-charcoal/30'}`}
+                  className={`w-3.5 h-3.5 rounded-full transition-all duration-300 ${safeReviewIndex === index ? 'bg-brand-red w-8' : 'bg-brand-gray-border hover:bg-brand-charcoal/30'}`}
                 />
               ))}
+            </div>
+
+            {/* Direct Google Review Action Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-12 border-t border-brand-gray-border/60 pt-10">
+              <a 
+                href="https://search.google.com/local/writereview?placeid=ChIJAQAM01pD54YROPEQr-ZAuEA" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="bg-brand-dark hover:bg-brand-charcoal text-white py-3 px-6 rounded-xl font-display font-bold text-sm transition-all shadow-sm flex items-center gap-2"
+              >
+                <ThumbsUp className="w-4 h-4 text-brand-red" />
+                {language === 'en' ? 'Write a Review' : 'Escribir una Reseña'}
+              </a>
+              <a 
+                href="https://search.google.com/local/reviews?placeid=ChIJAQAM01pD54YROPEQr-ZAuEA" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-brand-dark hover:text-brand-red font-display font-bold text-sm transition-all flex items-center gap-1.5"
+              >
+                {language === 'en' ? 'Read All Reviews' : 'Leer Todas las Reseñas'}
+                <ArrowRight className="w-4 h-4" />
+              </a>
             </div>
           </div>
         </div>
