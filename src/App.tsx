@@ -20,10 +20,9 @@ import {
 } from 'lucide-react'
 
 import patioLighting from './assets/patio-lighting.jpg'
-import solarInstall from './assets/solar-install.jpg'
+import constructionWorker from './assets/construction-worker.jpg'
 import evCharger from './assets/ev-charger.jpg'
 import outletInstall from './assets/outlet-install.jpg'
-import solarWiring from './assets/solar-wiring.jpg'
 import logo from './assets/logo.png'
 import awardTeam from './assets/award-team.jpg'
 import awardStandard from './assets/828-ai.png'
@@ -104,7 +103,7 @@ const content = {
         {
           title: 'Licensed, Insured & BBB Accredited',
           desc: 'We’re fully licensed, insured, and accredited by the Better Business Bureau with 8 years of trusted service. Professional work, done right the first time.',
-          img: 'solarWiring'
+          img: 'wiringHands'
         },
         {
           title: 'Top 5 Best Electricians in El Paso',
@@ -297,7 +296,7 @@ const content = {
         {
           title: 'Licenciados, Asegurados y Acreditados por BBB',
           desc: 'Estamos completamente licenciados, asegurados y acreditados por la Better Business Bureau con 8 años de servicio confiable. Trabajo profesional, hecho bien desde la primera vez.',
-          img: 'solarWiring'
+          img: 'wiringHands'
         },
         {
           title: 'Top 5 de los Mejores Electricistas en El Paso',
@@ -484,7 +483,7 @@ export default function App() {
     title: service.title,
     description: service.description,
     categories: [...service.categories] as Service['categories'],
-    image: [wiringHands, meterInstall, evCharger, patioLighting, solarInstall, outletInstall][index],
+    image: [wiringHands, meterInstall, evCharger, patioLighting, constructionWorker, outletInstall][index],
     details: [...service.details]
   }))
 
@@ -888,7 +887,7 @@ export default function App() {
             className="grid md:grid-cols-3 gap-8"
           >
             {t.about.cards.map((card, index) => {
-              const images = [awardTeam, solarWiring, top5Electricians]
+              const images = [awardTeam, wiringHands, top5Electricians]
               const icons = [<ThumbsUp className="w-6 h-6" />, <ShieldCheck className="w-6 h-6" />, <Award className="w-6 h-6" />]
               const positions = ['object-top', 'object-center', 'object-center']
               return (
