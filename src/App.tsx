@@ -80,7 +80,7 @@ const content = {
       titleLine2: 'Electrical Solutions',
       titleLine3: 'for Homes & Business.',
       description: 'At 828 Electric, we provide professional commercial and residential services in El Paso. From panels and meters to EV charging, we get the job done right the first time.',
-      primaryCta: 'Call (915) 213-7178',
+      primaryCta: 'Call (915) 271-9524',
       secondaryCta: 'View Our Services',
       stats: [
         { val: '8+', label: 'Years Experience' },
@@ -126,7 +126,7 @@ const content = {
       eyebrow: 'POPULAR QUESTIONS',
       heading: 'Get Answers to Your Questions',
       description: 'Electrical projects can raise a lot of questions. Here are answers to some of the most common ones our El Paso customers ask. Still need help? Call us and we will guide you.',
-      button: 'Call (915) 213-7178'
+      button: 'Call (915) 271-9524'
     },
     reviews: {
       eyebrow: 'TESTIMONIALS',
@@ -149,8 +149,7 @@ const content = {
       servicesGrid: 'Services Grid',
       faqs: 'FAQs',
       contactDetails: 'Contact Details',
-      primary: 'Primary: (915) 213-7178',
-      secondary: 'Secondary: (915) 271-9524',
+      primary: 'Phone: (915) 271-9524',
       followUs: 'Follow Us',
       copyright: '© {year} 828 Electric. All rights reserved.',
       privacy: 'Privacy Policy',
@@ -273,7 +272,7 @@ const content = {
       titleLine2: 'Soluciones Eléctricas',
       titleLine3: 'para Hogares y Negocios.',
       description: 'En 828 Electric ofrecemos servicios profesionales comerciales y residenciales en El Paso. Desde paneles y medidores hasta carga para vehículos eléctricos, hacemos el trabajo bien desde la primera vez.',
-      primaryCta: 'Llama al (915) 213-7178',
+      primaryCta: 'Llama al (915) 271-9524',
       secondaryCta: 'Ver Nuestros Servicios',
       stats: [
         { val: '8+', label: 'Años de Experiencia' },
@@ -319,7 +318,7 @@ const content = {
       eyebrow: 'PREGUNTAS POPULARES',
       heading: 'Obtenga Respuestas a Sus Preguntas',
       description: 'Los proyectos eléctricos suelen generar muchas preguntas. Aquí encontrará respuestas a algunas de las más comunes que hacen nuestros clientes en El Paso. ¿Aún necesita ayuda? Llámenos y le guiaremos.',
-      button: 'Llama al (915) 213-7178'
+      button: 'Llama al (915) 271-9524'
     },
     reviews: {
       eyebrow: 'TESTIMONIOS',
@@ -342,8 +341,7 @@ const content = {
       servicesGrid: 'Servicios',
       faqs: 'Preguntas Frecuentes',
       contactDetails: 'Detalles de Contacto',
-      primary: 'Principal: (915) 213-7178',
-      secondary: 'Secundario: (915) 271-9524',
+      primary: 'Teléfono: (915) 271-9524',
       followUs: 'Síganos',
       copyright: '© {year} 828 Electric. Todos los derechos reservados.',
       privacy: 'Política de Privacidad',
@@ -627,11 +625,11 @@ export default function App() {
               {language === 'en' ? 'ES' : 'EN'}
             </button>
             <a 
-              href="tel:+19152137178"
+              href="tel:+19152719524"
               className="flex items-center gap-2 font-display font-bold text-sm bg-brand-red text-white py-2.5 px-5 rounded-full transition-transform hover:scale-105 shadow-md shadow-brand-red/10 hover:shadow-brand-red/35 active:scale-95"
             >
               <Phone className="w-4 h-4" />
-              <span>(915) 213-7178</span>
+              <span>(915) 271-9524</span>
             </a>
           </div>
 
@@ -705,7 +703,7 @@ export default function App() {
                   {language === 'en' ? 'Cambiar a Español' : 'Switch to English'}
                 </button>
                 <a 
-                  href="tel:+19152137178"
+                  href="tel:+19152719524"
                   className="flex items-center justify-center gap-2 bg-brand-red text-white py-3 px-6 rounded-xl font-display font-bold hover:bg-brand-red-dark transition-colors"
                 >
                   <Phone className="w-5 h-5" />
@@ -781,7 +779,7 @@ export default function App() {
               className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center"
             >
               <motion.a 
-                href="tel:+19152137178"
+                href="tel:+19152719524"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.98 }}
                 className="relative overflow-hidden w-full sm:w-auto bg-brand-red text-white py-4 px-8 rounded-xl font-display font-bold text-base shadow-lg shadow-brand-red/35 flex items-center justify-center gap-2 group"
@@ -1058,11 +1056,11 @@ export default function App() {
 
               <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-brand-gray-border mt-6">
                 <a 
-                  href="tel:+19152137178"
+                  href="tel:+19152719524"
                   className="flex-1 bg-brand-red hover:bg-brand-red-dark text-white text-center py-3.5 px-6 rounded-xl font-display font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-brand-red/20 transition-all"
                 >
                   <Phone className="w-4 h-4 fill-current" />
-                  <span>Call (915) 213-7178</span>
+                  <span>{language === 'en' ? 'Call (915) 271-9524' : 'Llama al (915) 271-9524'}</span>
                 </a>
                 <button 
                   onClick={() => setSelectedService(null)}
@@ -1092,7 +1090,7 @@ export default function App() {
             </p>
             
             <a 
-              href="tel:+19152137178"
+              href="tel:+19152719524"
               className="inline-flex items-center justify-center gap-2 bg-brand-dark text-white py-4 px-6 rounded-xl font-display font-bold text-sm hover:bg-brand-dark-light transition-colors self-start shadow-md"
             >
               <Phone className="w-4.5 h-4.5" />
@@ -1307,7 +1305,7 @@ export default function App() {
             
             <div className="flex flex-col gap-4 max-w-sm mx-auto">
               <a 
-                href="tel:+19152137178"
+                href="tel:+19152719524"
                 className="flex items-center gap-3 bg-brand-red hover:bg-brand-red-dark text-white py-3.5 px-6 rounded-xl font-display font-bold transition-all shadow-lg shadow-brand-red/15"
               >
                 <div className="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center">
@@ -1315,7 +1313,7 @@ export default function App() {
                 </div>
                 <div>
                   <div className="text-[10px] text-white/60 text-left uppercase leading-none font-bold">{t.cta.callNow}</div>
-                  <div className="text-base font-display font-bold mt-0.5 leading-none">(915) 213-7178</div>
+                  <div className="text-base font-display font-bold mt-0.5 leading-none">(915) 271-9524</div>
                 </div>
               </a>
               
@@ -1366,13 +1364,9 @@ export default function App() {
           <div>
             <h4 className="font-extrabold text-white uppercase tracking-wider text-xs mb-4">{t.footer.contactDetails}</h4>
             <div className="flex flex-col gap-3 text-white/70 font-body font-light">
-              <a href="tel:+19152137178" className="flex items-center gap-2 hover:text-white transition-colors">
-                <Phone className="w-4 h-4 text-brand-red-light" />
-                <span>{t.footer.primary}</span>
-              </a>
               <a href="tel:+19152719524" className="flex items-center gap-2 hover:text-white transition-colors">
                 <Phone className="w-4 h-4 text-brand-red-light" />
-                <span>{t.footer.secondary}</span>
+                <span>{t.footer.primary}</span>
               </a>
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-brand-red-light" />
